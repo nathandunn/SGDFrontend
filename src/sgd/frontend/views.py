@@ -140,6 +140,10 @@ def home(request):
     ]
     return render_to_response(TEMPLATE_ROOT + 'temp_homepage.jinja2', { 'meetings': meetings, 'blog_posts': blog_posts }, request=request)
 
+@view_config(route_name='yeast_labs')
+def style_guide(request):
+    return render_to_response(TEMPLATE_ROOT + 'yeast_labs.jinja2', {}, request=request)
+
 # example
 # @view_config(route_name='example') 
 # def example(request):

@@ -17,6 +17,7 @@ def prep_views(chosen_frontend, config):
     config.add_route('suggestion', '/suggestion')
     config.add_route('variant_viewer', '/variant-viewer')
     config.add_route('search', '/search')
+    config.add_route('yeast_labs', '/yeast-labs')
     # config.add_route('example', '/example')
     
     # TEMP, render homepage here for prototype
