@@ -50,3 +50,9 @@ class SGDViewTests(unittest.TestCase):
         req = testing.DummyRequest()
         res = variant_viewer(req)
         self.assertEqual(res.status_code, 200)
+
+    def test_colleague(self):
+        from src.sgd.frontend.yeastgenome.views.misc_views import colleague_show_edit
+        req = testing.DummyRequest()
+        res = colleague_show_edit(req)
+        self.assertEqual(res.status_code, 200)

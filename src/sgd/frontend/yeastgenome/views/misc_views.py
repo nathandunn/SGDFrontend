@@ -20,6 +20,12 @@ def blast_fungal(request):
 def blast_sgd(request):
     return render_to_response(TEMPLATE_ROOT + 'blast_sgd.jinja2', {}, request=request)
 
+@view_config(route_name='colleague_show')
+@view_config(route_name='colleague_edit')
+@view_config(route_name='style_guide')
+def colleague_show_edit(request):
+    return render_to_response(TEMPLATE_ROOT + 'misc.jinja2', {}, request=request)
+
 @view_config(route_name='interaction_search')
 def interaction_search(request):
     return render_to_response(TEMPLATE_ROOT + 'interaction_search.jinja2', {}, request=request)
@@ -80,10 +86,6 @@ def search(request):
 @view_config(route_name='snapshot') 
 def snapshot(request):
     return render_to_response(TEMPLATE_ROOT + 'snapshot.jinja2', {}, request=request)
-
-@view_config(route_name='style_guide')
-def style_guide(request):
-    return render_to_response(TEMPLATE_ROOT + 'style_guide.jinja2', {}, request=request)
 
 @view_config(route_name='suggestion')
 def suggestion(request):
