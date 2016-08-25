@@ -1,11 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
-import Loader from '../../components/widgets/loader';
-import apiRequest from '../../lib/api_request';
-import { StringField, CheckField, TextField, SelectField, MultiSelectField } from '../../components/widgets/form_helpers';
+import apiRequest from '../../lib/api_request.jsx';
+import { StringField, CheckField, TextField, SelectField, MultiSelectField } from '../widgets/form_helpers.jsx';
 
-const COLLEAGUE_GET_URL = '/colleagues';
+const COLLEAGUE_GET_URL = '/backend/colleagues';
 const COLLEAGUE_POST_URL = '/colleagues';
 const COLLEAGUES_AUTOCOMPLETE_URL = '/colleagues_auto';
 const GENES_URL = '/genes';
@@ -46,7 +44,7 @@ const ColleaguesFormShow = React.createClass({
   },
 
   _renderForm () {
-    if (this.state.isLoadPending) return <Loader />;
+    if (this.state.isLoadPending) return <div className='sgd-loader-container'><div className='sgd-loader'></div></div>;
     let data = this.state.data;
     return (
       <div>
@@ -220,7 +218,6 @@ const ColleaguesFormShow = React.createClass({
     let _data = new FormData(this.refs.form);
     let url = this.props.isUpdate ? `${COLLEAGUE_POST_URL}/${this.props.colleagueDisplayName}` : COLLEAGUE_POST_URL;
     let options = {
-      crsfToken: this.props.crsfToken,
       data: _data,
       method: _method
     };
@@ -242,11 +239,4 @@ const ColleaguesFormShow = React.createClass({
   }
 });
 
-function mapStateToProps(_state) {
-  let state = _state.auth;
-  return {
-    csrfToken: state.csrfToken
-  };
-}
-
-export default connect(mapStateToProps)(ColleaguesFormShow);
+export default ColleaguesFormShow;
