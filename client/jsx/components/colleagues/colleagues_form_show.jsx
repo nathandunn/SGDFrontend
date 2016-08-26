@@ -205,7 +205,6 @@ const ColleaguesFormShow = React.createClass({
         {this._renderError()}
         <div className='button-group'>
           <a onClick={_onClick} className={`button ${classSuffix}`}>{saveIconNode}{label}</a>
-          <a className={'button alert'}><i className='fa fa-times' /> Delete</a>
         </div>
       </div>
     );
