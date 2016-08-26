@@ -77,7 +77,11 @@ const FacetSelector = React.createClass({
           break;
       };
       return (
-        <FacetList aggKey={d.key} values={d.values} currentValues={currentAgg.values} queryParams={this.props.queryParams} key={d.key} name={getFacetName(d.key)}/>
+        <FacetList
+          key={d.key} name={getFacetName(d.key)}
+          aggKey={d.key} values={d.values}
+          currentValues={currentAgg.values} queryParams={this.props.queryParams} 
+        />
       );
     });
 
