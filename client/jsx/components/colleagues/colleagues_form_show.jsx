@@ -51,20 +51,7 @@ const ColleaguesFormShow = React.createClass({
         {this._renderControls()}
         <form ref='form' onSubmit={this._submitData}>
           {this._renderStatusSelector()}
-          <div className='row'>
-            <div className='column small-3'>
-              <StringField isReadOnly={this.props.isReadOnly} displayName='First Name' paramName='first_name' defaultValue={data.first_name} />
-            </div>
-            <div className='column small-2'>
-              <StringField isReadOnly={this.props.isReadOnly} displayName='Middle Name' paramName='middle_name' defaultValue={data.middle_name} />
-            </div>
-            <div className='column small-5'>
-              <StringField isReadOnly={this.props.isReadOnly} displayName='Last Name' paramName='last_name' defaultValue={data.last_name} />
-            </div>
-            <div className='column small-2'>
-              <StringField isReadOnly={this.props.isReadOnly} displayName='Suffix' paramName='suffix' defaultValue={data.suffix} />
-            </div>
-          </div>
+          {this._renderName()}
           <div className='row'>
             <div className='column small-12'>
               <StringField isReadOnly={this.props.isReadOnly} displayName='Email' paramName='email' defaultValue={data.email} />
@@ -86,6 +73,27 @@ const ColleaguesFormShow = React.createClass({
           </div>
         </form>
         {this._renderControls()}
+      </div>
+    );
+  },
+
+  _renderName () {
+    let classExpression = this.props.isReadOnly ? '' : 'columns small-';
+    let data = this.state.data;
+    return (
+      <div className={this.props.isReadOnly ? '' : 'row'}>
+        <div className={`${classExpression}3`}>
+          <StringField isReadOnly={this.props.isReadOnly} displayName='First Name' paramName='first_name' defaultValue={data.first_name} />
+        </div>
+        <div className={`${classExpression}2`}>
+          <StringField isReadOnly={this.props.isReadOnly} displayName='Middle Name' paramName='middle_name' defaultValue={data.middle_name} />
+        </div>
+        <div className={`${classExpression}5`}>
+          <StringField isReadOnly={this.props.isReadOnly} displayName='Last Name' paramName='last_name' defaultValue={data.last_name} />
+        </div>
+        <div className={`${classExpression}2`}>
+          <StringField isReadOnly={this.props.isReadOnly} displayName='Suffix' paramName='suffix' defaultValue={data.suffix} />
+        </div>
       </div>
     );
   },
@@ -170,13 +178,21 @@ const ColleaguesFormShow = React.createClass({
 
   _renderOrcid () {
     let orcid = this.state.data.orcid || '';
-    let node = this.props.isReadOnly ? <p>{orcid}</p> :  <input type='text' name='orcid' defaultValue={orcid} />;
-    return (
-      <div>
-        <label>ORCID iD.  Get one at <a href='https://orcid.org/register'>https://orcid.org/register</a>.</label>
-        {node}
-      </div>
-    );
+    if (this.props.isReadOnly) {
+      return (
+        <dl className='key-value'>
+          <dt>ORCID iD</dt>
+          <dd>{orcid}</dd>
+        </dl>
+      );
+    } else {
+      return (
+        <div>
+          <label>ORCID iD.  Get one at <a href='https://orcid.org/register'>https://orcid.org/register</a>.</label>
+          <input type='text' name='orcid' defaultValue={orcid} />
+        </div>
+      );
+    }
   },
 
   _fetchData () {

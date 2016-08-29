@@ -45,15 +45,29 @@ export const StringField = React.createClass({
   },
 
   render () {
-    let iconNode = this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
-    let node = this.props.isReadOnly ?
-      <p>{this.props.defaultValue}</p> : <input type='text' name={this.props.paramName} placeholder={this.props.placeholder} defaultValue={this.props.defaultValue} />;
+    return this.props.isReadOnly ? this._renderReadOnly() : this._renderEdit();
+  },
+
+  _renderReadOnly () {
+    return (
+      <dl className='key-value'>
+        <dt>{this._renderIcon()}{this.props.displayName}</dt>
+        <dd>{this.props.defaultValue}</dd>
+      </dl>
+    );
+  },
+
+  _renderEdit () {
     return (
       <div>
-        <label>{iconNode}{this.props.displayName}</label>
-        {node}
+        <label>{this._renderIcon()}{this.props.displayName}</label>
+        <input type='text' name={this.props.paramName} placeholder={this.props.placeholder} defaultValue={this.props.defaultValue} />
       </div>
     );
+  },
+
+  _renderIcon () {
+    return this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
   }
 });
 
@@ -68,15 +82,29 @@ export const TextField = React.createClass({
   },
 
   render () {
-    let iconNode = this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
-    let node = this.props.isReadOnly ?
-      <p>{this.props.defaultValue}</p> : <textarea type='text' name={this.props.paramName} placeholder={this.props.placeholder}>{this.props.defaultValue}</textarea>;
+    return this.props.isReadOnly ? this._renderReadOnly() : this._renderEdit();
+  },
+
+  _renderReadOnly () {
+    return (
+      <dl className='key-value'>
+        <dt>{this._renderIcon()}{this.props.displayName}</dt>
+        <dd>{this.props.defaultValue}</dd>
+      </dl>
+    );
+  },
+
+  _renderEdit () {
     return (
       <div>
-        <label>{iconNode}{this.props.displayName}</label>
-        {node}
+        <label>{this._renderIcon()}{this.props.displayName}</label>
+        <textarea type='text' name={this.props.paramName} placeholder={this.props.placeholder}>{this.props.defaultValue}</textarea>
       </div>
     );
+  },
+
+  _renderIcon () {
+    return this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
   }
 });
 
@@ -116,16 +144,14 @@ export const MultiSelectField = React.createClass({
   _renderReadOnly () {
     let displayValuesStr = this.state.values.reduce( (prev, d, i) => {
       let maybeComma = (i === this.state.values.length) ? '' : ', ';
-      prev += `${d.name}${maybeComma}`;
+      let name = (typeof d === 'string') ? d : d.name;
+      prev += `${name}${maybeComma}`;
       return prev;
     }, '');
     let iconNode = this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
-    return (
-      <div>
-        <label>{iconNode}{this.props.displayName}</label>
-        <p>{displayValuesStr}</p>
-      </div>
-    );
+
+    let extendedProps = _.extend({ defaultValue: displayValuesStr }, this.props);
+    return <StringField {...extendedProps} />;
   },
 
   _onChange (newValues) {
