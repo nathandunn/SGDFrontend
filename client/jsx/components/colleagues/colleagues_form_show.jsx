@@ -7,8 +7,8 @@ import { StringField, CheckField, TextField, SelectField, MultiSelectField } fro
 
 const COLLEAGUE_GET_URL = '/backend/colleagues';
 const COLLEAGUE_POST_URL = '/colleagues';
-const COLLEAGUES_AUTOCOMPLETE_URL = '/colleagues_auto';
-const GENES_URL = '/genes';
+const COLLEAGUES_AUTOCOMPLETE_URL = '/backend/autocomplete_results?category=colleague&q=';
+const GENES_URL = '/backend/autocomplete_results?category=locus&q=';
 const KEYWORDS_AUTOCOMPLETE_URL = '/keywords';
 
 const ColleaguesFormShow = React.createClass({
@@ -67,7 +67,6 @@ const ColleaguesFormShow = React.createClass({
               <StringField isReadOnly={this.props.isReadOnly} displayName='Lab Webpage' paramName='lab_page' defaultValue={data.lab_page} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Research Summary Webpage' paramName='research_page' defaultValue={data.research_page} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Research Interests' paramName='research_interests' defaultValue={data.research_interests} />
-              <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Keywords' paramName='keywords' optionsUrl={KEYWORDS_AUTOCOMPLETE_URL} defaultValues={data.keywords} />
               {this._renderAssociates()}
               {this._renderGenes()}
               {this._renderOrcid()}
@@ -78,6 +77,8 @@ const ColleaguesFormShow = React.createClass({
         {this._renderControls()}
       </div>
     );
+    // TEMP put keywords here
+    // <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Keywords' paramName='keywords' optionsUrl={KEYWORDS_AUTOCOMPLETE_URL} defaultValues={data.keywords} />
   },
 
   _renderName () {

@@ -15,5 +15,6 @@ module.exports = (
     <Route path='style-guide' component={StyleGuide} />
     <Route path='colleague/:formatName/overview' component={ColleaguesShow} />
     <Route path='colleague/:formatName/edit' component={ColleaguesEdit} />
+    <Route path='colleague/new' component={ColleaguesEdit} />
   </Route>
 );

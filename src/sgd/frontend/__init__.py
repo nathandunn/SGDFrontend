@@ -15,6 +15,7 @@ def prep_views(chosen_frontend, config):
     config.add_route('blast_sgd', '/blast-sgd')
     config.add_route('colleague_show', '/colleague/{identifier}/overview')
     config.add_route('colleague_edit', '/colleague/{identifier}/edit')
+    config.add_route('colleague_new', '/colleague/new')
     config.add_route('download_list', '/download-list')
     config.add_route('interaction_search', '/interaction-search')
     config.add_route('snapshot', '/genomesnapshot')

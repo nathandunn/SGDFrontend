@@ -22,6 +22,7 @@ def blast_sgd(request):
 
 @view_config(route_name='colleague_show')
 @view_config(route_name='colleague_edit')
+@view_config(route_name='colleague_new')
 @view_config(route_name='style_guide')
 def colleague_show_edit(request):
     return render_to_response(TEMPLATE_ROOT + 'misc.jinja2', {}, request=request)

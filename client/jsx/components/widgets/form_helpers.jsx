@@ -134,8 +134,9 @@ export const MultiSelectField = React.createClass({
         <Select multi simpleValue joinValues
           name={this.props.paramName} value={this.state.values}
           asyncOptions={this._getAsyncOptions()}
-          labelKey='name' valueKey='id'
-          onChange={this._onChange} 
+          labelKey='name' valueKey='name'
+          onChange={this._onChange} delimiter='@@'
+          allowCreate={true}
         />
       </div>
     );
@@ -155,20 +156,21 @@ export const MultiSelectField = React.createClass({
   },
 
   _onChange (newValues) {
-    newValues = newValues ? newValues.split(',').map( d => { return parseInt(d); }) : [];
+    newValues = newValues ? newValues.split('@@') : [];
     this.setState({ values: newValues });
   },
 
   // from a URL, returns the fetch function needed to get the options
   _getAsyncOptions () {
     return (input, cb) => {
-      fetch(this.props.optionsUrl)
+      let url = `${this.props.optionsUrl}${input}`;
+      fetch(url)
         .then( response => {
           return response.json();
         }).then( optionsObj => {
           // add defaultOptions to results and remove duplicated
           let defaultOptions = this.props.defaultOptions || [];
-          optionsObj.options = _.uniq(optionsObj.options.concat(defaultOptions));
+          optionsObj.options = _.uniq(optionsObj.results.concat(defaultOptions));
           if (!this.isMounted()) return;
           return cb(null, optionsObj);
         });
