@@ -148,7 +148,8 @@ const AppSearchBar = React.createClass({
     let newQuery = encodeURIComponent(this.props.userInput);
     if (this.props.redirectOnSearch) {
       // format query param, use isShowAll is to append
-      let newUrl = `/search?q=${newQuery}&is_quick=${this.state.isShowAll ? 'false' : 'true'}`;
+      let categorySegment = this.props.category ? `&category=${this.props.category}` : '';
+      let newUrl = `/search?q=${newQuery}${categorySegment}&is_quick=${this.state.isShowAll ? 'false' : 'true'}`;
       return this._hardRedirect(newUrl);
     }
     this._updateUrl(newQuery);
@@ -168,6 +169,7 @@ function mapStateToProps(_state) {
   const state = _state.searchResults;
   return {
     userInput: state.userInput,
+    category:_state.routing.location.query.category,
     redirectOnSearch: true,
     resultsUrl: AUTOCOMPLETE_URL
   };
