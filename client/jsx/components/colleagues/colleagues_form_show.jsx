@@ -51,7 +51,7 @@ const ColleaguesFormShow = React.createClass({
     return (
       <div>
         {this._renderControls()}
-        <Captcha onComplete={() => {}}/>
+        {this._renderCaptcha()}
         <form ref='form' onSubmit={this._submitData}>
           {this._renderStatusSelector()}
           {this._renderName()}
@@ -230,6 +230,15 @@ const ColleaguesFormShow = React.createClass({
     );
   },
 
+  _renderCaptcha() {
+    if (this.props.isReadOnly) return null;
+    return (
+      <div style={[style.controlContainer]}>
+        <Captcha onComplete={() => {}}/>
+      </div>
+    );
+  },
+
   // saves form data to server, if new makes POST
   _submitData (e) {
     if (e) e.preventDefault();
@@ -264,7 +273,7 @@ const style = {
   },
   controlButton: {
     marginRight: '0.5rem'
-  },
+  }
 };
 
 export default Radium(ColleaguesFormShow);

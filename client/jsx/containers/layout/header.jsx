@@ -177,8 +177,8 @@ const Header = React.createClass({
                 <li className="has-dropdown">
                   <a href="#">Colleague Information</a>
                   <ul className="dropdown">
-                    <li><a className="disabled-header-a" href="/cgi-bin/colleague/colleagueInfoSearch">Find a Colleague</a></li>
-                    <li><a className="disabled-header-a" href="/cgi-bin/colleague/colleagueSearch">Add or Update Info</a></li>
+                    <li><a className="disabled-header-a" href="/search?q=&category=colleague">Find a Colleague</a></li>
+                    <li><a className="disabled-header-a" href="/search?q=&category=colleague">Add or Update Info</a></li>
                     <li><a className="disabled-header-a" href="/cache/yeastLabs.html">Find a Yeast Lab</a></li>
                   </ul>
                 </li>
