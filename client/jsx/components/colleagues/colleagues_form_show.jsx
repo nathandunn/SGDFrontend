@@ -1,6 +1,8 @@
 import React from 'react';
+import Radium from 'radium';
 
 import apiRequest from '../../lib/api_request.jsx';
+import Captcha from '../widgets/google_recaptcha.jsx';
 import { StringField, CheckField, TextField, SelectField, MultiSelectField } from '../widgets/form_helpers.jsx';
 
 const COLLEAGUE_GET_URL = '/backend/colleagues';
@@ -49,6 +51,7 @@ const ColleaguesFormShow = React.createClass({
     return (
       <div>
         {this._renderControls()}
+        <Captcha onComplete={() => {}}/>
         <form ref='form' onSubmit={this._submitData}>
           {this._renderStatusSelector()}
           {this._renderName()}
@@ -209,9 +212,9 @@ const ColleaguesFormShow = React.createClass({
 
   _renderControls () {
     if (this.props.isReadOnly) return null;
-    let classSuffix = this.state.isUpdatePending ? ' disabled secondary' : '';
-    let label = this.state.isUpdatePending ? 'Saving...' : 'Save';
-    let saveIconNode = this.state.isUpdatePending ? null : <span><i className='fa fa-floppy-o' /> </span>;
+    let classSuffix = this.state.isUpdatePending ? ' disabled ' : '';
+    let label = this.state.isUpdatePending ? 'Saving...' : 'Send Update';
+    let saveIconNode = this.state.isUpdatePending ? null : <span><i className='fa fa-upload' /> </span>;
     let _onClick = e => {
       e.preventDefault();
       this._submitData();
@@ -219,8 +222,9 @@ const ColleaguesFormShow = React.createClass({
     return (
       <div>
         {this._renderError()}
-        <div className='button-group'>
-          <a onClick={_onClick} className={`button ${classSuffix}`}>{saveIconNode}{label}</a>
+        <div className='button-group' style={[style.controlContainer]}>
+          <a onClick={_onClick} className={`button small secondary ${classSuffix}`}style={[style.controlButton]}>{saveIconNode}{label}</a>
+          <a href='/search?category=colleague' className='button small secondary'style={[style.controlButton]}><i className='fa fa-search' /> Search Colleagues</a>
         </div>
       </div>
     );
@@ -254,4 +258,13 @@ const ColleaguesFormShow = React.createClass({
   }
 });
 
-export default ColleaguesFormShow;
+const style = {
+  controlContainer: {
+    marginBottom: '1rem'
+  },
+  controlButton: {
+    marginRight: '0.5rem'
+  },
+};
+
+export default Radium(ColleaguesFormShow);
