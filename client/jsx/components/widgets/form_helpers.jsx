@@ -24,10 +24,11 @@ export const CheckField = React.createClass({
   },
 
   _renderReadOnly () {
+    console.log('check')
     let iconNode = this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
     let iconClass = this.props.defaultChecked ? 'check-square-o' : 'square-o';
     return (
-      <div>
+      <div className='form-read-field'>
         <label><i className={`fa fa-${iconClass}`} /> {iconNode}{this.props.displayName}</label>
       </div>
     );
@@ -50,10 +51,12 @@ export const StringField = React.createClass({
 
   _renderReadOnly () {
     return (
-      <dl className='key-value'>
-        <dt>{this._renderIcon()}{this.props.displayName}</dt>
-        <dd>{this.props.defaultValue}</dd>
-      </dl>
+      <div className='form-read-field'>
+        <dl className='key-value'>
+          <dt>{this._renderIcon()}{this.props.displayName}</dt>
+          <dd>{this.props.defaultValue}</dd>
+        </dl>
+      </div>
     );
   },
 
@@ -87,10 +90,12 @@ export const TextField = React.createClass({
 
   _renderReadOnly () {
     return (
-      <dl className='key-value'>
-        <dt>{this._renderIcon()}{this.props.displayName}</dt>
-        <dd>{this.props.defaultValue}</dd>
-      </dl>
+      <div className='form-read-field'>
+        <dl className='key-value'>
+          <dt>{this._renderIcon()}{this.props.displayName}</dt>
+          <dd>{this.props.defaultValue}</dd>
+        </dl>
+      </div>
     );
   },
 
@@ -213,7 +218,7 @@ export const SelectField = React.createClass({
   _renderReadOnly () {
     let iconNode = this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
     return (
-      <div>
+      <div className='form-read-field'>
         <label>{iconNode}{this.props.displayName}</label>
         <p>{this.props.defaultValue}</p>
       </div>

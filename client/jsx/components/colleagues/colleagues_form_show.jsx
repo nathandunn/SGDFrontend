@@ -35,7 +35,6 @@ const ColleaguesFormShow = React.createClass({
     return (
       <div>
         <h1>{label}</h1>
-        <hr />
         {this._renderForm()}
       </div>
     );
@@ -49,14 +48,14 @@ const ColleaguesFormShow = React.createClass({
     if (this.state.isLoadPending) return <div className='sgd-loader-container'><div className='sgd-loader'></div></div>;
     let data = this.state.data;
     return (
-      <div>
+      <div style={[style.container]}>
         {this._renderControls()}
         {this._renderCaptcha()}
         <form ref='form' onSubmit={this._submitData}>
           {this._renderStatusSelector()}
-          {this._renderName()}
           <div className='row'>
             <div className='column small-12'>
+              {this._renderName()}
               <StringField isReadOnly={this.props.isReadOnly} displayName='Email' paramName='email' defaultValue={data.email} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Position' paramName='position' defaultValue={data.position} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Profession' paramName='profession' defaultValue={data.profession} />
@@ -82,20 +81,27 @@ const ColleaguesFormShow = React.createClass({
   },
 
   _renderName () {
-    let classExpression = this.props.isReadOnly ? '' : 'columns small-';
     let data = this.state.data;
+    if (this.props.isReadOnly) {
+      return [
+        <StringField isReadOnly={this.props.isReadOnly} displayName='First Name' paramName='first_name' defaultValue={data.first_name} key='name0'/>,
+        <StringField isReadOnly={this.props.isReadOnly} displayName='Middle Name' paramName='middle_name' defaultValue={data.middle_name} key='name1'/>,
+        <StringField isReadOnly={this.props.isReadOnly} displayName='Last Name' paramName='last_name' defaultValue={data.last_name} key='name2'/>,
+        <StringField isReadOnly={this.props.isReadOnly} displayName='Suffix' paramName='suffix' defaultValue={data.suffix} key='name3'/>
+      ];
+    }
     return (
-      <div className={this.props.isReadOnly ? '' : 'row'}>
-        <div className={`${classExpression}3`}>
+      <div className='row'>
+        <div className='columns small-3'>
           <StringField isReadOnly={this.props.isReadOnly} displayName='First Name' paramName='first_name' defaultValue={data.first_name} />
         </div>
-        <div className={`${classExpression}2`}>
+        <div className='columns small-2'>
           <StringField isReadOnly={this.props.isReadOnly} displayName='Middle Name' paramName='middle_name' defaultValue={data.middle_name} />
         </div>
-        <div className={`${classExpression}5`}>
+        <div className='columns small-5'>
           <StringField isReadOnly={this.props.isReadOnly} displayName='Last Name' paramName='last_name' defaultValue={data.last_name} />
         </div>
-        <div className={`${classExpression}2`}>
+        <div className='columns small-2'>
           <StringField isReadOnly={this.props.isReadOnly} displayName='Suffix' paramName='suffix' defaultValue={data.suffix} />
         </div>
       </div>
@@ -119,17 +125,16 @@ const ColleaguesFormShow = React.createClass({
 
   _renderAddress () {
     let data = this.state.data;
-    let addOneNode = this.props.isReadOnly ? <p>{data.address_0}</p> :  <input type='text' name='address_0' defaultValue={data.address_0} />;
-    let addTwoNode = this.props.isReadOnly ? <p>{data.address_1}</p> :  <input placeholder='street' type='text' name='address_1' defaultValue={data.address_1} />;
-    let addThreeNode = this.props.isReadOnly ? <p>{data.address_2}</p> :  <input placeholder='suite #' type='text' name='address_2' defaultValue={data.address_2} />;
+    if (this.props.isReadOnly) {
+      return [
+        <StringField isReadOnly={this.props.isReadOnly} displayName='City' paramName='city' defaultValue={data.city} key='address0' />,
+        <StringField isReadOnly={this.props.isReadOnly} displayName='State / Region' paramName='state' defaultValue={data.state} key='address1' />,
+        <StringField isReadOnly={this.props.isReadOnly} displayName='Postal Code' paramName='postal_code' defaultValue={data.postal_code} key='address2' />,
+        <StringField isReadOnly={this.props.isReadOnly} displayName='Country' paramName='country' defaultValue={data.country} key='address3' />
+      ];
+    }
     return (
       <div className='row'>
-        <div className='column small-12'>
-          <label>Address</label>
-          {addOneNode}
-          {addTwoNode}
-          {addThreeNode}
-        </div>
         <div className='column small-3'>
           <StringField isReadOnly={this.props.isReadOnly} displayName='City' paramName='city' defaultValue={data.city} />
         </div>
@@ -149,12 +154,10 @@ const ColleaguesFormShow = React.createClass({
   _renderAssociates () {
     let supervisors = this.state.data.supervisors || [];
     let labMembers = this.state.data.lab_members || [];
-    return (
-      <div>
-        <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Supervisor(s)' paramName='supervisors_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL} defaultValues={this._getIdsFromArray(supervisors)} defaultOptions={supervisors}/>
-        <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Lab Members' paramName='lab_members_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL} defaultValues={this._getIdsFromArray(labMembers)} defaultOptions={labMembers}/>
-      </div>
-    );
+    return [
+      <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Supervisor(s)' paramName='supervisors_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL} defaultValues={this._getIdsFromArray(supervisors)} defaultOptions={supervisors} key='associate0' />,
+      <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Lab Members' paramName='lab_members_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL} defaultValues={this._getIdsFromArray(labMembers)} defaultOptions={labMembers} key='associate1' />
+    ];
   },
 
   _renderCuratorInput () {
@@ -183,17 +186,12 @@ const ColleaguesFormShow = React.createClass({
   _renderOrcid () {
     let orcid = this.state.data.orcid || '';
     if (this.props.isReadOnly) {
-      return (
-        <dl className='key-value'>
-          <dt>ORCID iD</dt>
-          <dd>{orcid}</dd>
-        </dl>
-      );
+      return <StringField isReadOnly={this.props.isReadOnly} displayName='ORCID iD' paramName='orcid' defaultValue={orcid} />;
     } else {
       return (
         <div>
-          <label>ORCID iD.  Get one at <a href='https://orcid.org/register'>https://orcid.org/register</a>.</label>
-          <input type='text' name='orcid' defaultValue={orcid} />
+          <StringField isReadOnly={this.props.isReadOnly} displayName='ORCID iD' paramName='orcid' defaultValue={orcid} />
+          <p>Get an ORCID iD at <a href='https://orcid.org/register'>https://orcid.org/register</a>.</p>
         </div>
       );
     }
@@ -269,6 +267,9 @@ const ColleaguesFormShow = React.createClass({
 });
 
 const style = {
+  container: {
+    marginBottom: '2rem'
+  },
   controlContainer: {
     marginBottom: '1rem'
   },
