@@ -6,10 +6,11 @@ import Captcha from '../widgets/google_recaptcha.jsx';
 import { StringField, CheckField, TextField, SelectField, MultiSelectField } from '../widgets/form_helpers.jsx';
 
 const COLLEAGUE_GET_URL = '/backend/colleagues';
-const COLLEAGUE_POST_URL = '/colleagues';
+const COLLEAGUE_UPDATE_URL = '/backend/user_colleagues';
 const COLLEAGUES_AUTOCOMPLETE_URL = '/backend/autocomplete_results?category=colleague&q=';
 const GENES_URL = '/backend/autocomplete_results?category=locus&q=';
-const KEYWORDS_AUTOCOMPLETE_URL = '/keywords';
+const KEYWORDS_AUTOCOMPLETE_URL = '/backend/autocomplete_results?category=colleague&field=keywords&q=';
+const INSTITUTION_URL = '/backend/autocomplete_results?category=colleague&field=institution&q=';
 
 const ColleaguesFormShow = React.createClass({
   propTypes: {
@@ -59,13 +60,14 @@ const ColleaguesFormShow = React.createClass({
               <StringField isReadOnly={this.props.isReadOnly} displayName='Email' paramName='email' defaultValue={data.email} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Position' paramName='position' defaultValue={data.position} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Profession' paramName='profession' defaultValue={data.profession} />
-              <StringField isReadOnly={this.props.isReadOnly} displayName='Organization' paramName='organization' defaultValue={data.organization} />
+              <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Institution' paramName='institution' defaultValue={data.institution} optionsUrl={INSTITUTION_URL} isMulti={false} allowCreate={true} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Work Phone' paramName='work_phone' defaultValue={data.work_phone} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Other Phone' paramName='other_phone' defaultValue={data.other_phone} />
               {this._renderAddress()}
               <StringField isReadOnly={this.props.isReadOnly} displayName='Lab Webpage' paramName='lab_page' defaultValue={data.lab_page} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Research Summary Webpage' paramName='research_page' defaultValue={data.research_page} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Research Interests' paramName='research_interests' defaultValue={data.research_interests} />
+              <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Keywords' paramName='keywords' optionsUrl={KEYWORDS_AUTOCOMPLETE_URL} defaultValues={data.keywords} />
               {this._renderAssociates()}
               {this._renderGenes()}
               {this._renderOrcid()}
@@ -155,8 +157,18 @@ const ColleaguesFormShow = React.createClass({
     let supervisors = this.state.data.supervisors || [];
     let labMembers = this.state.data.lab_members || [];
     return [
-      <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Supervisor(s)' paramName='supervisors_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL} defaultValues={this._getIdsFromArray(supervisors)} defaultOptions={supervisors} key='associate0' />,
-      <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Lab Members' paramName='lab_members_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL} defaultValues={this._getIdsFromArray(labMembers)} defaultOptions={labMembers} key='associate1' />
+      <MultiSelectField
+        isReadOnly={this.props.isReadOnly} displayName='Supervisor(s)'
+        paramName='supervisors_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL}
+        defaultValues={this._getIdsFromArray(supervisors)} defaultOptions={supervisors}
+        allowCreate={true} key='associate0'
+      />,
+      <MultiSelectField
+        isReadOnly={this.props.isReadOnly} displayName='Lab Members'
+        paramName='lab_members_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL}
+        defaultValues={this._getIdsFromArray(labMembers)} defaultOptions={labMembers}
+        allowCreate={true} key='associate1'
+      />
     ];
   },
 
@@ -243,7 +255,7 @@ const ColleaguesFormShow = React.createClass({
     if (e) e.preventDefault();
     let _method = this.props.isUpdate ? 'PUT' : 'POST';
     let _data = new FormData(this.refs.form);
-    let url = this.props.isUpdate ? `${COLLEAGUE_POST_URL}/${this.props.colleagueDisplayName}` : COLLEAGUE_POST_URL;
+    let url = this.props.isUpdate ? `${COLLEAGUE_UPDATE_URL}/${this.props.colleagueDisplayName}` : COLLEAGUE_POST_URL;
     let options = {
       data: _data,
       method: _method

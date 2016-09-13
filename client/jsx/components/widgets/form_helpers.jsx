@@ -24,7 +24,6 @@ export const CheckField = React.createClass({
   },
 
   _renderReadOnly () {
-    console.log('check')
     let iconNode = this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
     let iconClass = this.props.defaultChecked ? 'check-square-o' : 'square-o';
     return (
@@ -121,7 +120,15 @@ export const MultiSelectField = React.createClass({
     defaultValues: React.PropTypes.array,
     iconClass: React.PropTypes.string,
     defaultOptions: React.PropTypes.array,
-    isReadOnly: React.PropTypes.bool
+    isReadOnly: React.PropTypes.bool,
+    allowCreate: React.PropTypes.bool,
+    isMulti: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
+    return {
+      isMulti: true
+    };
   },
 
   getInitialState () {
@@ -136,12 +143,12 @@ export const MultiSelectField = React.createClass({
     return (
       <div>
         <label>{iconNode}{this.props.displayName}</label>
-        <Select multi simpleValue joinValues
+        <Select multi={this.props.isMulti} joinValues
           name={this.props.paramName} value={this.state.values}
           asyncOptions={this._getAsyncOptions()}
           labelKey='name' valueKey='name'
           onChange={this._onChange} delimiter='@@'
-          allowCreate={true}
+          allowCreate={this.props.allowCreate}
         />
       </div>
     );
@@ -190,7 +197,8 @@ export const SelectField = React.createClass({
     defaultValue: React.PropTypes.string,
     iconClass: React.PropTypes.string,
     options: React.PropTypes.array,
-    isReadOnly: React.PropTypes.bool
+    isReadOnly: React.PropTypes.bool,
+    allowCreate: React.PropTypes.bool
   },
 
   getInitialState () {
@@ -209,7 +217,7 @@ export const SelectField = React.createClass({
           name={this.props.paramName} value={this.state.value}
           options={this.props.options} clearable={false}
           labelKey='name' valueKey='id'
-          onChange={this._onChange} 
+          onChange={this._onChange} allowCreate={this.props.allowCreate} 
         />
       </div>
     );
