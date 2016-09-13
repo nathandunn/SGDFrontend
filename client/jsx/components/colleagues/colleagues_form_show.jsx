@@ -53,9 +53,9 @@ const ColleaguesFormShow = React.createClass({
         {this._renderControls()}
         {this._renderCaptcha()}
         <form ref='form' onSubmit={this._submitData}>
-          {this._renderStatusSelector()}
           <div className='row'>
             <div className='column small-12'>
+              {this._renderStatusSelector()}
               {this._renderName()}
               <StringField isReadOnly={this.props.isReadOnly} displayName='Email' paramName='email' defaultValue={data.email} />
               <StringField isReadOnly={this.props.isReadOnly} displayName='Position' paramName='position' defaultValue={data.position} />
@@ -116,13 +116,7 @@ const ColleaguesFormShow = React.createClass({
       { id: 'triaged', name: 'Triaged' },
       { id: 'approved', name: 'Approved' }
     ];
-    return (
-      <div className='row'>
-        <div className='column small-3'>
-          <SelectField isReadOnly={this.props.isReadOnly} displayName='Status' paramName='status' defaultValue={this.state.data.status} options={_options} />
-        </div>
-      </div>
-    );
+    return <SelectField isReadOnly={this.props.isReadOnly} displayName='Status' paramName='status' defaultValue={this.state.data.status} options={_options} />;
   },
 
   _renderAddress () {
@@ -242,7 +236,7 @@ const ColleaguesFormShow = React.createClass({
   },
 
   _renderCaptcha() {
-    if (this.props.isReadOnly) return null;
+    if (this.props.isReadOnly || this.props.isCurator) return null;
     return (
       <div style={[style.controlContainer]}>
         <Captcha onComplete={() => {}}/>

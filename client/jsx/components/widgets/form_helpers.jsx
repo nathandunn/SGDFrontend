@@ -24,13 +24,10 @@ export const CheckField = React.createClass({
   },
 
   _renderReadOnly () {
-    let iconNode = this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
-    let iconClass = this.props.defaultChecked ? 'check-square-o' : 'square-o';
-    return (
-      <div className='form-read-field'>
-        <label><i className={`fa fa-${iconClass}`} /> {iconNode}{this.props.displayName}</label>
-      </div>
-    );
+    let stringVal = this.props.defaultChecked ? 'true' : 'false';
+    let extendedProps = _.clone(this.props);
+    extendedProps.defaultValue = stringVal;
+    return <StringField {...extendedProps} />;
   }
 });
 
@@ -224,13 +221,7 @@ export const SelectField = React.createClass({
   },
 
   _renderReadOnly () {
-    let iconNode = this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
-    return (
-      <div className='form-read-field'>
-        <label>{iconNode}{this.props.displayName}</label>
-        <p>{this.props.defaultValue}</p>
-      </div>
-    );
+    return <StringField {...this.props} />;
   },
 
   _onChange (newValue) {
