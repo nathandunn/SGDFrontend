@@ -6,7 +6,7 @@ import Captcha from '../widgets/google_recaptcha.jsx';
 import { StringField, CheckField, TextField, SelectField, MultiSelectField } from '../widgets/form_helpers.jsx';
 
 const COLLEAGUE_GET_URL = '/backend/colleagues';
-const COLLEAGUE_UPDATE_URL = '/backend/user_colleagues';
+const COLLEAGUE_UPDATE_URL = '/backend/colleague_triage';
 const COLLEAGUES_AUTOCOMPLETE_URL = '/backend/autocomplete_results?category=colleague&q=';
 const GENES_URL = '/backend/autocomplete_results?category=locus&q=';
 const KEYWORDS_AUTOCOMPLETE_URL = '/backend/autocomplete_results?category=colleague&field=keywords&q=';

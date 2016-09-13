@@ -468,8 +468,13 @@ class YeastgenomeFrontend(FrontendInterface):
         return Response(body=json.dumps(res), content_type='application/json')
 
     def backend(self, url_repr, request, args=None):
-        relative_url = '/' + ('/'.join(url_repr))
-        backend_url = self.backend_url
+        relative_url = '/' + ('/'.join(url_repr))        
+        backend_url = config.backend_url
+        # allow backend for colleague stuff to come from nex2
+        is_colleague = '/backend/colleague' in request.path
+        is_colleague_auto = 'autocomplete_results' in request.path and args.get('category')
+        if is_colleague or is_colleague_auto:
+            backend_url = config.nex2_backend_url
         full_url = backend_url + relative_url
         if args is not None and len(args) > 0:
             full_url += '?' + request.query_string
