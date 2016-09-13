@@ -480,7 +480,7 @@ class YeastgenomeFrontend(FrontendInterface):
             full_url += '?' + request.query_string
         self.log.info(full_url)
         if request.method == 'PUT':
-            r = requests.put(full_url, params=request.params)
+            r = requests.put(full_url, params=request.params, data=request.body)
             return r.text
         return json.dumps(get_json(full_url))
     
