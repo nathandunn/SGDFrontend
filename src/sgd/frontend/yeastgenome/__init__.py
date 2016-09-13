@@ -479,6 +479,9 @@ class YeastgenomeFrontend(FrontendInterface):
         if args is not None and len(args) > 0:
             full_url += '?' + request.query_string
         self.log.info(full_url)
+        if request.method == 'PUT':
+            r = requests.put(full_url, params=request.params)
+            return r.text
         return json.dumps(get_json(full_url))
     
 def yeastgenome_frontend(backend_url, heritage_url, log_directory, **configs):
