@@ -25,11 +25,13 @@ const ColleaguesFormShow = React.createClass({
       data: {},
       isLoadPending: false, // loading existing data
       isUpdatePending: false, // sending update to server
+      isComplete: false,
       error: null
     };
   },
 
   render () {
+    if (this.state.isComplete) return this._renderCompleteNode();
     let formLabel = this.props.isUpdate ? 'Update Colleague' : 'New Colleague';
     let showLabel = this.state.isLoadPending ? '...' : `${this.state.data.first_name} ${this.state.data.last_name}`;
     let label = this.props.isReadOnly ? showLabel : formLabel;
@@ -203,14 +205,6 @@ const ColleaguesFormShow = React.createClass({
     }
   },
 
-  _fetchData () {
-    this.setState({ isLoadPending: true });
-    let url = `${COLLEAGUE_GET_URL}/${this.props.colleagueDisplayName}`;
-    apiRequest(url).then( json => {
-      this.setState({ data: json, isLoadPending: false });
-    });
-  },
-
   _getIdsFromArray (original) {
     return original.map( d => d.id );
   },
@@ -228,7 +222,7 @@ const ColleaguesFormShow = React.createClass({
       <div>
         {this._renderError()}
         <div className='button-group' style={[style.controlContainer]}>
-          <a onClick={_onClick} className={`button small secondary ${classSuffix}`}style={[style.controlButton]}>{saveIconNode}{label}</a>
+          <a onClick={_onClick} className={`button small secondary ${classSuffix}`} style={[style.controlButton]}>{saveIconNode}{label}</a>
           <a href='/search?category=colleague' className='button small secondary'style={[style.controlButton]}><i className='fa fa-search' /> Search Colleagues</a>
         </div>
       </div>
@@ -244,6 +238,14 @@ const ColleaguesFormShow = React.createClass({
     );
   },
 
+  _fetchData () {
+    this.setState({ isLoadPending: true });
+    let url = `${COLLEAGUE_GET_URL}/${this.props.colleagueDisplayName}`;
+    apiRequest(url).then( json => {
+      this.setState({ data: json, isLoadPending: false });
+    });
+  },
+
   // saves form data to server, if new makes POST
   _submitData (e) {
     if (e) e.preventDefault();
@@ -254,9 +256,8 @@ const ColleaguesFormShow = React.createClass({
       data: _data,
       method: _method
     };
-    // TEMP
     apiRequest(url, options).then( response => {
-      this.setState({ error: null });
+      this.setState({ error: null, isComplete: true });
     }).catch( e => {
       this.setState({ error: e.message });
     });
@@ -265,8 +266,16 @@ const ColleaguesFormShow = React.createClass({
   _renderError () {
     if (!this.state.error) return null;
     return (
-      <div className='callout warning'>
-        <p>{this.state.error}</p>
+      <div className='alert-box warning'>
+        <p style={[style.alertMessage]}>{this.state.error}</p>
+      </div>
+    );
+  },
+
+  _renderCompleteNode () {
+    return (
+      <div className='alert-box'>
+        <p style={[style.alertMessage]}>Your information has been received and will be processed by our staff.  Please contact sgd-helpdesk@lists.stanford.edu for further questions.</p>
       </div>
     );
   }
@@ -281,6 +290,9 @@ const style = {
   },
   controlButton: {
     marginRight: '0.5rem'
+  },
+  alertMessage: {
+    marginBottom: 0
   }
 };
 
