@@ -207,7 +207,7 @@ const ColleaguesFormShow = React.createClass({
 
   _makeNameProperty (original) {
     return original.map( d => {
-      return { name: d }
+      return { name: d };
     });
   },
 
