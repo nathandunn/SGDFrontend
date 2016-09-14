@@ -156,13 +156,13 @@ const ColleaguesFormShow = React.createClass({
       <MultiSelectField
         isReadOnly={this.props.isReadOnly} displayName='Supervisor(s)'
         paramName='supervisors_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL}
-        defaultValues={this._getIdsFromArray(supervisors)} defaultOptions={supervisors}
+        defaultValues={this._makeNameProperty(supervisors)} defaultOptions={supervisors}
         allowCreate={true} key='associate0'
       />,
       <MultiSelectField
         isReadOnly={this.props.isReadOnly} displayName='Lab Members'
         paramName='lab_members_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL}
-        defaultValues={this._getIdsFromArray(labMembers)} defaultOptions={labMembers}
+        defaultValues={this._makeNameProperty(labMembers)} defaultOptions={labMembers}
         allowCreate={true} key='associate1'
       />
     ];
@@ -183,7 +183,7 @@ const ColleaguesFormShow = React.createClass({
 
   _renderGenes () {
     let data = this.state.data.associated_genes || [];
-    return <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Associated Genes' paramName='associated_gene_ids' optionsUrl={GENES_URL} defaultValues={this._getIdsFromArray(data)} defaultOptions={data}/>;
+    return <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Associated Genes' paramName='associated_gene_ids' optionsUrl={GENES_URL} defaultValues={this._makeNameProperty(data)} defaultOptions={data}/>;
   },
 
   _renderComments () {
@@ -205,8 +205,10 @@ const ColleaguesFormShow = React.createClass({
     }
   },
 
-  _getIdsFromArray (original) {
-    return original.map( d => d.id );
+  _makeNameProperty (original) {
+    return original.map( d => {
+      return { name: d }
+    });
   },
 
   _renderControls () {
