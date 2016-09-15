@@ -11,6 +11,7 @@ def prep_views(chosen_frontend, config):
     config.scan('src.sgd.frontend.yeastgenome.views.locus_views')
     # misc pages from misc_views
     config.add_route('home', '/')
+    config.add_route('backend', '/backend/*url')
     config.add_route('blast_fungal', '/blast-fungal')
     config.add_route('blast_sgd', '/blast-sgd')
     config.add_route('colleague_show', '/colleague/{identifier}/overview')
@@ -194,11 +195,6 @@ def prep_views(chosen_frontend, config):
     config.add_view(lambda request: chosen_frontend.response_wrapper('experiment', request)(getattr(chosen_frontend, 'experiment')(experiment_repr=request.matchdict['identifier'].lower())),
                     renderer=chosen_frontend.get_renderer('experiment'),
                     route_name='experiment')
-
-    config.add_route('backend', '/backend/*url')
-    config.add_view(lambda request: chosen_frontend.response_wrapper('backend', request)(getattr(chosen_frontend, 'backend')(url_repr=request.matchdict['url'], args=request.GET, request=request)),
-                    renderer='string',
-                    route_name='backend')
 
     config.add_route('send_email', '/send_data')
     config.add_view(send_message, route_name='send_email')   

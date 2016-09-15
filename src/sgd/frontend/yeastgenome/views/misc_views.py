@@ -12,6 +12,18 @@ import requests
 SEARCH_URL = config.backend_url + '/get_search_results'
 TEMPLATE_ROOT = 'src:sgd/frontend/yeastgenome/static/templates/'
 
+@view_config(route_name='backend')
+def backend(request):
+    backend_url = config.backend_url
+    # allow backend for colleague stuff to come from nex2
+    is_colleague = '/backend/colleague' in request.path
+    is_colleague_auto = 'autocomplete_results?category=' in request.path_qs
+    if is_colleague or is_colleague_auto:
+        backend_url = config.nex2_backend_url
+    new_url = request.path_qs.replace('/backend', backend_url)
+    r = requests.request(url=new_url, method=request.method, params=request.params, data=request.body, headers=request.headers)
+    return Response(body=r.text, content_type='application/json', status_code=r.status_code, charset='utf-8')
+
 @view_config(route_name='blast_fungal')
 def blast_fungal(request):
     return render_to_response(TEMPLATE_ROOT + 'blast_fungal.jinja2', {}, request=request)

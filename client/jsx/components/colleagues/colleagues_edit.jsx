@@ -11,7 +11,7 @@ const ColleaguesEdit = React.createClass({
   },
 
   _isUpdate () {
-  	return this.props.colleagueDisplayName;
+  	return (typeof this.props.routeParams.formatName === 'string');
   }
 });
 
