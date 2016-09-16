@@ -33,11 +33,13 @@ const ColleaguesFormShow = React.createClass({
       data: {},
       isLoadPending: false, // loading existing data
       isUpdatePending: false, // sending update to server
+      isComplete: false,
       error: null
     };
   },
 
   render () {
+    if (this.state.isComplete) return this._renderCompleteNode();
     let formLabel = this.props.isUpdate ? 'Update Colleague' : 'New Colleague';
     let showLabel = this.state.isLoadPending ? '...' : `${this.state.data.first_name} ${this.state.data.last_name}`;
     let label = this.props.isReadOnly ? showLabel : formLabel;
@@ -61,6 +63,14 @@ const ColleaguesFormShow = React.createClass({
       <div className='button-group' style={[style.controlContainer]}>
         <a onClick={onApprove} className='button small' style={[style.controlButton]}><i className='fa fa-check'/> Approve Update</a>
         <Link to='/curate/colleagues' className='button small secondary' style={[style.controlButton]}><i className='fa fa-times'/> Cancel Update</Link>
+      </div>
+    );
+  },
+
+  _renderCompleteNode () {
+    return (
+      <div className='panel callout'>
+        <p>Thanks for the information!  It will soon be received and put on the site.</p>
       </div>
     );
   },
@@ -162,13 +172,13 @@ const ColleaguesFormShow = React.createClass({
       <MultiSelectField
         isReadOnly={this.props.isReadOnly} displayName='Supervisor(s)'
         paramName='supervisors_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL}
-        defaultValues={this._getIdsFromArray(supervisors)} defaultOptions={supervisors}
+        defaultValues={supervisors} defaultOptions={supervisors}
         allowCreate={true} key='associate0'
       />,
       <MultiSelectField
         isReadOnly={this.props.isReadOnly} displayName='Lab Members'
         paramName='lab_members_display_names' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL}
-        defaultValues={this._getIdsFromArray(labMembers)} defaultOptions={labMembers}
+        defaultValues={labMembers} defaultOptions={labMembers}
         allowCreate={true} key='associate1'
       />
     ];
@@ -189,7 +199,7 @@ const ColleaguesFormShow = React.createClass({
 
   _renderGenes () {
     let data = this.state.data.associated_genes || [];
-    return <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Associated Genes' paramName='associated_gene_ids' optionsUrl={GENES_URL} defaultValues={this._getIdsFromArray(data)} defaultOptions={data}/>;
+    return <MultiSelectField isReadOnly={this.props.isReadOnly} displayName='Associated Genes' paramName='associated_gene_ids' optionsUrl={GENES_URL} defaultValues={data} defaultOptions={data}/>;
   },
 
   _renderComments () {
@@ -228,11 +238,7 @@ const ColleaguesFormShow = React.createClass({
       });
     }
   },
-
-  _getIdsFromArray (original) {
-    return original.map( d => d.id );
-  },
-
+  
   _renderControls () {
     if (this.props.isReadOnly) return null;
     let classSuffix = this.state.isUpdatePending ? ' disabled ' : '';
@@ -286,7 +292,6 @@ const ColleaguesFormShow = React.createClass({
         this.setState({ isComplete: true });
       }
     }).catch( e => {
-      console.log('is an error')
       this.setState({ error: e.message });
     });
   },
