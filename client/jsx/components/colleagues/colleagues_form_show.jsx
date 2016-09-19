@@ -168,18 +168,21 @@ const ColleaguesFormShow = React.createClass({
   _renderAssociates () {
     let supervisors = this.state.data.supervisors || [];
     let labMembers = this.state.data.lab_members || [];
+    let _formatLink = d => { return `/colleague/${d.format_name}/overview`; }
     return [
       <MultiSelectField
         isReadOnly={this.props.isReadOnly} displayName='Supervisor(s)'
         paramName='supervisors' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL}
         defaultValues={supervisors} defaultOptions={supervisors}
         allowCreate={true} key='associate0'
+        isLinks={true} formatLink={_formatLink}
       />,
       <MultiSelectField
         isReadOnly={this.props.isReadOnly} displayName='Lab Members'
         paramName='lab_members' optionsUrl={COLLEAGUES_AUTOCOMPLETE_URL}
         defaultValues={labMembers} defaultOptions={labMembers}
         allowCreate={true} key='associate1'
+        isLinks={true} formatLink={_formatLink}
       />
     ];
   },

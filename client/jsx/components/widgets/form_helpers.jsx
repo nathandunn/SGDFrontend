@@ -37,7 +37,7 @@ export const StringField = React.createClass({
   propTypes: {
     displayName: React.PropTypes.string,
     paramName: React.PropTypes.string,
-    defaultValue: React.PropTypes.string,
+    // defaultValue: string or nodes
     iconClass: React.PropTypes.string,
     placeholder: React.PropTypes.string,
     isReadOnly: React.PropTypes.bool
@@ -121,7 +121,9 @@ export const MultiSelectField = React.createClass({
     defaultOptions: React.PropTypes.array,
     isReadOnly: React.PropTypes.bool,
     allowCreate: React.PropTypes.bool,
-    isMulti: React.PropTypes.bool
+    isMulti: React.PropTypes.bool,
+    isLinks: React.PropTypes.bool,
+    formatLink: React.PropTypes.func
   },
 
   getDefaultProps () {
@@ -159,15 +161,22 @@ export const MultiSelectField = React.createClass({
   },
 
   _renderReadOnly () {
-    let displayValuesStr = this.state.values.reduce( (prev, d, i) => {
-      let maybeComma = (i === this.state.values.length) ? '' : ', ';
-      let name = (typeof d === 'string') ? d : d.name;
-      prev += `${name}${maybeComma}`;
-      return prev;
-    }, '');
-    let iconNode = this.props.iconClass ? <span><i className={`fa fa-${this.props.iconClass}`} /> </span> : null;
-
-    let extendedProps = _.extend({ defaultValue: displayValuesStr }, this.props);
+    let values;
+    if (this.props.isLinks) {
+      values = this.state.values.map( (d, i) => {
+        let url = this.props.formatLink(d);
+        let maybeComma = (i === this.state.values.length - 1) ? null : <span>, </span>;
+        return <span key={`collA${d.format_name}`}><a href={url}>{d.name}</a>{maybeComma}</span>;
+      });
+    } else {
+      values = this.state.values.reduce( (prev, d, i) => {
+        let maybeComma = (i === this.state.values.length - 1) ? '' : ', ';
+        let name = (typeof d === 'string') ? d : d.name;
+        prev += `${name}${maybeComma}`;
+        return prev;
+      }, '');
+    }
+    let extendedProps = _.extend({ defaultValue: values }, this.props);
     return <StringField {...extendedProps} />;
   },
 
