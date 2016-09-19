@@ -2,6 +2,8 @@ import React from 'react';
 import Select from 'react-select';
 import _ from 'underscore';
 
+const DELIMITER = '@@';
+
 export const CheckField = React.createClass({
   propTypes: {
     displayName: React.PropTypes.string,
@@ -144,7 +146,7 @@ export const MultiSelectField = React.createClass({
           name={this.props.paramName} value={this.state.values}
           asyncOptions={this._getAsyncOptions()}
           labelKey='name' valueKey='name'
-          onChange={this._onChange} delimiter='@@'
+          onChange={this._onChange} delimiter={DELIMITER}
           allowCreate={this.props.allowCreate}
         />
       </div>
@@ -165,7 +167,7 @@ export const MultiSelectField = React.createClass({
   },
 
   _onChange (newValues) {
-    newValues = newValues ? newValues.split('@@') : [];
+    newValues = newValues ? newValues.split(DELIMITER) : [];
     this.setState({ values: newValues });
   },
 
