@@ -124,15 +124,20 @@ export const MultiSelectField = React.createClass({
     isMulti: React.PropTypes.bool
   },
 
-  getDefaultProps() {
+  getDefaultProps () {
     return {
       isMulti: true
     };
   },
 
   getInitialState () {
+    let defaultValues = this.props.defaultValues || [];
+    // if string is supplied, convert to array
+    if (typeof defaultValues === 'string') {
+      defaultValues = defaultValues.split(DELIMITER);
+    }
     return {
-      values: this.props.defaultValues || []
+      values: defaultValues || []
     };
   },
 
